@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String               @id @default(cuid())
+  email       String               @unique
+  name        String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  auditEvents AuditEvent[]
+  memberships OrganizationMember[]
+  workflows   Workflow[]
+}
+
+model Organization {
+  id                     String                  @id @default(cuid())
+  name                   String
+  slug                   String                  @unique
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  auditEvents            AuditEvent[]
+  integrationCredentials IntegrationCredential[]
+  members                OrganizationMember[]
+  workflows              Workflow[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  role           String       @default("admin")
+  status         String       @default("active")
+  lastActiveAt   DateTime?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId, role])
+  @@index([userId])
+}
+
+model Workflow {
+  id              String              @id @default(cuid())
+  organizationId  String
+  createdById     String?
+  slug            String
+  name            String
+  description     String
+  status          String              @default("draft")
+  triggerType     String
+  retryLimit      Int                 @default(3)
+  timeoutSeconds  Int                 @default(60)
+  runCount        Int                 @default(0)
+  successCount    Int                 @default(0)
+  failureCount    Int                 @default(0)
+  lastRunAt       DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  organization    Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy       User?               @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  steps           WorkflowStep[]
+  executions      WorkflowExecution[]
+  webhookEndpoint WebhookEndpoint?
+  schedule        WorkflowSchedule?
+
+  @@unique([organizationId, slug])
+  @@index([organizationId, status])
+  @@index([triggerType])
+}
+
+model WorkflowStep {
+  id         String   @id @default(cuid())
+  workflowId String
+  type       String
+  name       String
+  position   Int
+  config     String   @default("{}")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@unique([workflowId, position])
+  @@index([workflowId])
+}
+
+model WorkflowExecution {
+  id          String                  @id @default(cuid())
+  workflowId  String
+  status      String                  @default("queued")
+  triggerType String
+  attempt     Int                     @default(1)
+  input       String                  @default("{}")
+  output      String                  @default("{}")
+  error       String?
+  durationMs  Int?
+  startedAt   DateTime                @default(now())
+  finishedAt  DateTime?
+  workflow    Workflow                @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  logs        ExecutionLog[]
+  steps       WorkflowStepExecution[]
+
+  @@index([workflowId, startedAt])
+  @@index([status])
+}
+
+model WorkflowStepExecution {
+  id          String            @id @default(cuid())
+  executionId String
+  stepId      String?
+  stepName    String
+  stepType    String
+  position    Int
+  status      String            @default("queued")
+  durationMs  Int?
+  output      String            @default("{}")
+  error       String?
+  startedAt   DateTime          @default(now())
+  finishedAt  DateTime?
+  execution   WorkflowExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+
+  @@index([executionId, position])
+  @@index([status])
+}
+
+model ExecutionLog {
+  id          String            @id @default(cuid())
+  executionId String
+  stepName    String
+  level       String            @default("info")
+  message     String
+  metadata    String            @default("{}")
+  createdAt   DateTime          @default(now())
+  execution   WorkflowExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+
+  @@index([executionId, createdAt])
+}
+
+model WebhookEndpoint {
+  id         String   @id @default(cuid())
+  workflowId String   @unique
+  publicPath String   @unique
+  secret     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+}
+
+model WorkflowSchedule {
+  id              String    @id @default(cuid())
+  workflowId      String    @unique
+  cron            String
+  timezone        String    @default("UTC")
+  enabled         Boolean   @default(true)
+  nextRunAt       DateTime?
+  lastTriggeredAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  workflow        Workflow  @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+}
+
+model IntegrationCredential {
+  id             String       @id @default(cuid())
+  organizationId String
+  provider       String
+  displayName    String
+  status         String       @default("connected")
+  environment    String       @default("production")
+  scopes         String       @default("[]")
+  maskedSecret   String
+  lastCheckedAt  DateTime?
+  expiresAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, provider])
+  @@index([status])
+}
+
+model AuditEvent {
+  id             String       @id @default(cuid())
+  organizationId String
+  actorId        String?
+  entityType     String
+  entityId       String
+  action         String
+  summary        String
+  metadata       String       @default("{}")
+  createdAt      DateTime     @default(now())
+  actor          User?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
+  @@index([entityType, entityId])
+}
