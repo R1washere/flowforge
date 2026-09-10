@@ -9,6 +9,12 @@ This is a personal portfolio project built from scratch. It does not contain
 proprietary code, data, internal architecture, or business logic from any
 employer.
 
+## Screenshots
+
+![FlowForge dashboard](docs/screenshots/dashboard.png)
+
+![FlowForge workflow builder](docs/screenshots/builder.png)
+
 ## What I Built
 
 - Workflow dashboard with active, paused, failed and retrying automations.
