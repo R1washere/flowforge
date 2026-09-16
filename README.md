@@ -18,7 +18,7 @@ employer.
 - Product area: workflow automation, webhooks, schedules, executions, RBAC,
   integrations and audit events.
 - Review path: start with the screenshots, then open
-  `docs/reviewer-guide.md` and `docs/architecture.md`.
+  `docs/reviewer-guide.md`, `docs/architecture.md` and `ROADMAP.md`.
 - Verification path: run `pnpm verify` for local checks, builds and smoke
   tests.
 
