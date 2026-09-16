@@ -1,5 +1,7 @@
 # FlowForge
 
+[![CI](https://github.com/R1washere/flowforge/actions/workflows/ci.yml/badge.svg)](https://github.com/R1washere/flowforge/actions/workflows/ci.yml)
+
 FlowForge is a full-stack workflow automation demo for operations-heavy SaaS
 products. It lets a team define workflow triggers, conditions and actions, run
 demo executions, inspect execution logs, and simulate webhook or scheduled
@@ -8,6 +10,17 @@ automation runs.
 This is a personal portfolio project built from scratch. It does not contain
 proprietary code, data, internal architecture, or business logic from any
 employer.
+
+## Quick Review
+
+- Full-stack monorepo with Next.js UI, NestJS API, Prisma schema and shared
+  TypeScript contracts.
+- Product area: workflow automation, webhooks, schedules, executions, RBAC,
+  integrations and audit events.
+- Review path: start with the screenshots, then open
+  `docs/reviewer-guide.md` and `docs/architecture.md`.
+- Verification path: run `pnpm verify` for local checks, builds and smoke
+  tests.
 
 ## Screenshots
 
@@ -95,3 +108,4 @@ demo data.
 
 - Architecture overview: `docs/architecture.md`
 - Demo guide: `docs/portfolio-demo-guide.md`
+- Reviewer guide: `docs/reviewer-guide.md`
