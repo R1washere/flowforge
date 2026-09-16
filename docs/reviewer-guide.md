@@ -8,10 +8,11 @@ and operational visibility.
 
 1. Start with `README.md` for the product overview and local setup.
 2. Review `docs/architecture.md` for the app boundaries and data flow.
-3. Open `apps/web/app` and `apps/web/components/app` for the Next.js UI.
-4. Open `apps/api/src/workflows`, `apps/api/src/executions`, and
+3. Use `docs/api-examples.md` to exercise the main API flows with `curl`.
+4. Open `apps/web/app` and `apps/web/components/app` for the Next.js UI.
+5. Open `apps/api/src/workflows`, `apps/api/src/executions`, and
    `apps/api/src/webhooks` for the main backend flows.
-5. Open `prisma/schema.prisma` to review the workflow, execution, team, and
+6. Open `prisma/schema.prisma` to review the workflow, execution, team, and
    audit models.
 
 ## What To Look For
