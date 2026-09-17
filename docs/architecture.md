@@ -36,10 +36,10 @@ HTTP request
   -> stores authSession on the request
 ```
 
-The demo keeps authentication simple for portfolio review, but the backend still
-has the same shape as a production permission system: request-scoped identity,
-role policy lookup, route-level permission metadata, and forbidden responses for
-unsafe actions.
+The demo resolves identity from a request header (or the seeded default user).
+This is not production authentication. The backend demonstrates request-scoped
+identity, role policy lookup, route-level permission metadata, and forbidden
+responses for unauthorized actions.
 
 ## Execution Flow
 
@@ -80,9 +80,12 @@ POST /api/integrations/health-check
   -> records audit events with previousStatus and nextStatus
 ```
 
-## Why This Project Is Strong
+## Demo Boundaries
 
-FlowForge shows engineering problems that appear in real companies:
-reliable background processing, idempotency, retries, observability, dynamic
-workflow configuration, RBAC, auditability, integration governance, and UI for
-debugging operational failures.
+Executions are simulated synchronously and persist step logs, statuses and
+audit events. A failed run may be marked `retrying` with a suggested next
+attempt, but no worker actually retries it. The schedule endpoint runs due
+workflows when called; there is no background scheduler. Idempotency and
+durable job processing are not implemented. The project demonstrates workflow
+configuration, permission checks and operational inspection without claiming
+production delivery guarantees.
