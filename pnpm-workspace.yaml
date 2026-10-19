@@ -6,3 +6,5 @@ allowBuilds:
   '@prisma/engines': true
   esbuild: true
   prisma: true
+overrides:
+  source-map-js: 1.2.2
