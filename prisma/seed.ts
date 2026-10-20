@@ -3,6 +3,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  if (process.env.NODE_ENV === "production") {
+    const existingUsers = await prisma.user.count();
+    if (existingUsers > 0) {
+      console.log("Production database is not empty; demo seed was skipped.");
+      return;
+    }
+  }
+
   await prisma.executionLog.deleteMany();
   await prisma.workflowStepExecution.deleteMany();
   await prisma.workflowExecution.deleteMany();

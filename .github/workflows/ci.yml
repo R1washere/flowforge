@@ -10,6 +10,22 @@ jobs:
   quality:
     name: Quality checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: flowforge
+          POSTGRES_USER: flowforge
+          POSTGRES_PASSWORD: flowforge
+        ports:
+          - 55433:5432
+        options: >-
+          --health-cmd "pg_isready -U flowforge -d flowforge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout
@@ -26,14 +42,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma client
-        run: pnpm db:generate
+      - name: Configure local test environment
+        run: cp .env.example .env
 
       - name: Lint
         run: pnpm lint
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Build
-        run: pnpm build
+      - name: Verify PostgreSQL migrations, builds, API, and web routes
+        run: pnpm verify

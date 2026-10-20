@@ -7,7 +7,7 @@ Browser
   -> Next.js web app
     -> NestJS API
       -> Prisma
-        -> SQLite demo database
+        -> PostgreSQL demo database
 ```
 
 ## Domain Modules
@@ -40,6 +40,10 @@ The demo resolves identity from a request header (or the seeded default user).
 This is not production authentication. The backend demonstrates request-scoped
 identity, role policy lookup, route-level permission metadata, and forbidden
 responses for unauthorized actions.
+
+Hosted production mode requires `PUBLIC_DEMO_MODE=true` before this deliberately
+insecure identity switcher is enabled. The public deployment is therefore a
+shared, synthetic-data portfolio sandbox—not a multi-tenant production system.
 
 ## Execution Flow
 

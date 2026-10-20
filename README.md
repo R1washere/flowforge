@@ -39,7 +39,7 @@ employer.
 - Integration health checks with masked credentials.
 - Team and RBAC demo with protected workflow actions.
 - Audit trail for workflow changes, execution runs and access changes.
-- SQLite seed data for a quick local review.
+- PostgreSQL seed data for a quick local review and hosted demo.
 
 ## Stack
 
@@ -48,7 +48,7 @@ employer.
 - NestJS
 - TypeScript
 - Prisma
-- SQLite
+- PostgreSQL
 - pnpm workspaces
 
 ## Project Structure
@@ -57,7 +57,7 @@ employer.
 apps/web          Next.js dashboard and workflow builder
 apps/api          NestJS API and execution endpoints
 packages/shared   Shared TypeScript contracts
-prisma            SQLite schema and seed data
+prisma            PostgreSQL schema, migrations and seed data
 scripts           Local setup, verification and smoke tests
 ```
 
@@ -66,6 +66,7 @@ scripts           Local setup, verification and smoke tests
 ```bash
 pnpm install
 cp .env.example .env
+docker compose up -d
 pnpm db:setup
 pnpm dev
 ```
@@ -101,12 +102,26 @@ curl -X POST http://localhost:4200/api/schedules/run-due
 pnpm verify
 ```
 
-The verification script resets the local SQLite database, runs checks, builds
+The verification script resets the local PostgreSQL database, runs checks, builds
 the workspaces, starts the local apps, runs smoke tests, and restores seeded
 demo data.
+
+`pnpm db:setup` refuses to reset a remote or production database.
+
+## Public Demo Deployment
+
+The repository includes deployment configuration for a zero-cost portfolio
+demo: Vercel Hobby for the web app, Render Free for the API, and Neon Free for
+PostgreSQL. Follow `docs/deployment.md` for the exact environment variables and
+live verification checklist.
+
+This is intentionally a shared demo with synthetic data. The request header
+identity switcher demonstrates RBAC but is not real authentication. Never store
+personal data, real credentials, or secrets in a public demo deployment.
 
 ## Notes
 
 - Architecture overview: `docs/architecture.md`
 - Demo guide: `docs/portfolio-demo-guide.md`
 - Reviewer guide: `docs/reviewer-guide.md`
+- Deployment guide: `docs/deployment.md`

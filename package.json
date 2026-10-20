@@ -12,9 +12,11 @@
     "test:api": "node scripts/api-smoke-test.mjs",
     "test:e2e": "pnpm db:setup && playwright test",
     "format": "node node_modules/prettier/bin/prettier.cjs --write \"**/*.{ts,tsx,js,json,md}\" && node node_modules/prisma/build/index.js format",
-    "db:setup": "node scripts/setup-sqlite.mjs && pnpm db:generate && pnpm db:seed",
+    "db:setup": "node --env-file=.env scripts/setup-postgres.mjs",
+    "db:deploy": "node node_modules/prisma/build/index.js migrate deploy",
     "db:generate": "node node_modules/prisma/build/index.js generate",
-    "db:seed": "node node_modules/tsx/dist/cli.mjs prisma/seed.ts"
+    "db:seed": "node node_modules/tsx/dist/cli.mjs prisma/seed.ts",
+    "db:seed:production": "node node_modules/tsx/dist/cli.mjs prisma/seed.ts"
   },
   "engines": {
     "node": ">=20.0.0",
