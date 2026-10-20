@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 
 const apiBaseUrl = process.env.API_BASE_URL ?? "http://localhost:4200/api";
 
-const api = spawn("pnpm", ["--filter", "@flowforge/api", "dev"], {
+const api = spawn("node", ["apps/api/dist/apps/api/src/main.js"], {
   env: {
     ...process.env,
     API_PORT: "4200",
@@ -299,7 +299,16 @@ try {
 
   console.log("FlowForge API smoke test passed");
 } finally {
+  await stopApi();
+}
+
+async function stopApi() {
+  if (api.exitCode !== null) return;
+
   api.kill("SIGTERM");
+  const forceStop = setTimeout(() => api.kill("SIGKILL"), 5_000);
+  await new Promise((resolve) => api.once("close", resolve));
+  clearTimeout(forceStop);
 }
 
 async function waitForHealth() {
