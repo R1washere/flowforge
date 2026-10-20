@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: flowforge
+      POSTGRES_USER: flowforge
+      POSTGRES_PASSWORD: flowforge
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - flowforge-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flowforge -d flowforge"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  flowforge-postgres:

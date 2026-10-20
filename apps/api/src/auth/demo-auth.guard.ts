@@ -4,7 +4,9 @@ import {
   ForbiddenException,
   Injectable,
   UnauthorizedException,
+  ServiceUnavailableException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { Reflector } from "@nestjs/core";
 import type { OrganizationRole, Permission } from "@flowforge/shared";
 import type { AuthenticatedRequest } from "./auth-session";
@@ -17,9 +19,19 @@ export class DemoAuthGuard implements CanActivate {
   constructor(
     private readonly prisma: PrismaService,
     private readonly reflector: Reflector,
+    private readonly config: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    if (
+      this.config.get<string>("NODE_ENV") === "production" &&
+      this.config.get<string>("PUBLIC_DEMO_MODE") !== "true"
+    ) {
+      throw new ServiceUnavailableException(
+        "Demo authentication must be explicitly enabled in production",
+      );
+    }
+
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const requiredPermissions =
       this.reflector.getAllAndOverride<Permission[]>(REQUIRED_PERMISSIONS_KEY, [

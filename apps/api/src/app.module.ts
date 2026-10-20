@@ -10,12 +10,14 @@ import { SchedulesModule } from "./schedules/schedules.module";
 import { TeamModule } from "./team/team.module";
 import { WebhooksModule } from "./webhooks/webhooks.module";
 import { WorkflowsModule } from "./workflows/workflows.module";
+import { validateEnvironment } from "./config/environment";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [".env", "../../.env"],
+      validate: validateEnvironment,
     }),
     PrismaModule,
     HealthModule,

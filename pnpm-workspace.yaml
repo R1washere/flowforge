@@ -7,4 +7,5 @@ allowBuilds:
   esbuild: true
   prisma: true
 overrides:
+  qs: 6.16.0
   source-map-js: 1.2.2
