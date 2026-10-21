@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/R1washere/flowforge/actions/workflows/ci.yml/badge.svg)](https://github.com/R1washere/flowforge/actions/workflows/ci.yml)
 
+[Live demo](https://flowforge-orcin.vercel.app) · [API health](https://flowforge-api-rma3.onrender.com/api/health)
+
 FlowForge is a full-stack workflow automation demo for operations-heavy SaaS
 products. It lets a team define workflow triggers, conditions and actions, run
 demo executions, inspect execution logs, and simulate webhook or scheduled
@@ -114,6 +116,11 @@ The repository includes deployment configuration for a zero-cost portfolio
 demo: Vercel Hobby for the web app, Render Free for the API, and Neon Free for
 PostgreSQL. Follow `docs/deployment.md` for the exact environment variables and
 live verification checklist.
+
+The verified public deployment is available at
+[flowforge-orcin.vercel.app](https://flowforge-orcin.vercel.app), with the API
+health check at
+[flowforge-api-rma3.onrender.com/api/health](https://flowforge-api-rma3.onrender.com/api/health).
 
 This is intentionally a shared demo with synthetic data. The request header
 identity switcher demonstrates RBAC but is not real authentication. Never store
