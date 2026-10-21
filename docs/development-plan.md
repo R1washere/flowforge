@@ -6,7 +6,7 @@
 - Add Next.js web app.
 - Add NestJS API app.
 - Add shared contracts package.
-- Add Prisma SQLite schema and seed data.
+- Add Prisma PostgreSQL schema and seed data.
 - Add dashboard, workflows, builder, and execution log screens.
 - Add API smoke test.
 
