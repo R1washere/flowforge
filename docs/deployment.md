@@ -40,8 +40,9 @@ After deploy, verify `https://<render-service>/api/health` returns HTTP 200.
 
 ## 3. Web
 
-Import the repository into Vercel on the Hobby plan. Keep the repository root as
-the project root; `vercel.json` contains the monorepo build settings. Add:
+Import the repository into Vercel on the Hobby plan. Set the project Root
+Directory to `apps/web`; `vercel.json` contains the matching monorepo build
+settings. Add:
 
 - `NEXT_PUBLIC_API_BASE_URL=https://<render-service>/api`
 
