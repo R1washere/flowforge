@@ -23,7 +23,7 @@ to build, run, monitor, and govern internal automations.
 - Monorepo structure with shared TypeScript contracts.
 - NestJS modules separated by domain: workflows, executions, schedules,
   integrations, audit, auth, and team.
-- Prisma schema models a realistic SaaS domain on SQLite for local demo speed.
+- Prisma schema models a realistic SaaS domain on PostgreSQL for local and hosted demos.
 - Execution engine records workflow runs, step runs, output payloads, errors,
   logs, retry state, and counters.
 - Webhook endpoint validates a secret before running the same engine.
@@ -49,6 +49,6 @@ nina.finance@northstar.dev          viewer
 pnpm verify
 ```
 
-The verification script rebuilds the SQLite database, generates Prisma Client,
+The verification script rebuilds the local PostgreSQL database, generates Prisma Client,
 runs TypeScript checks, builds both apps, runs API smoke tests, and resets seed
 data again.
