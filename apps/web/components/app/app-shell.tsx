@@ -45,7 +45,7 @@ export function AppShell({
         <div className="workspace-card">
           <span className="eyebrow">Workspace</span>
           <strong>Northstar SaaS</strong>
-          <span>3 workflows · SQLite demo</span>
+          <span>3 workflows · PostgreSQL demo</span>
         </div>
 
         <AuthSwitcher />
