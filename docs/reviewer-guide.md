@@ -32,5 +32,5 @@ pnpm db:setup
 pnpm verify
 ```
 
-The verification script prepares the local SQLite database, runs checks, builds
+The verification script prepares the local PostgreSQL database, runs checks, builds
 the workspaces, starts the apps, and runs smoke tests.
