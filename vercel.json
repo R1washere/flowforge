@@ -3,5 +3,5 @@
   "framework": "nextjs",
   "installCommand": "corepack enable && pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @flowforge/web build",
-  "outputDirectory": "apps/web/.next"
+  "outputDirectory": ".next"
 }
